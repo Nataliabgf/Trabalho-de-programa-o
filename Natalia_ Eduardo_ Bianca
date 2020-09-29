@@ -1,0 +1,7 @@
+# sistema_reciclagem_resíduos 
+Cálculo do lucro de reciclagem
+
+|Nome do campo|Tipo|Descrição|
+|reciclagem|resíduos|lucro|
+|----------|---------|--------|
+|Status|Inteiro|Campo que gurada o valor, peso e quantidade de cada material|

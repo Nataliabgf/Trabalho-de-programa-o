@@ -4,9 +4,10 @@ Cálculo do lucro de reciclagem
 |Nome do campo|Tipo|Descrição|
 |reciclagem|resíduos|lucro|
 |----------|---------|--------|
-| quantidade_material|Inteiro|Campo que gurada a quantidade de cada material|
-| valor_material|Real|Campo que guarda o valor  de cada material|
+|quantidade_material|Inteiro|Campo que gurda a quantidade de cada material|
+|valor_material|Real|Campo que guarda o valor  de cada material|
 |peso_material|Real|Campo que guarda o peso de cada material|
 |mes_maior_rendimento|Cadeia de caracteres|Campo que garda mês com maior rendimento|
-|dia_maior_rendimento|Cadeia de caracteres|Campo que guarda odia da semanas com maior rendimento|
+|dia_maior_rendimento|Cadeia de caracteres|Campo que guarda o dia da semanas com maior rendimento|
 |cidade|Cadeia de caracteres|Campo que guarda a cidade onde está localizada|
+|

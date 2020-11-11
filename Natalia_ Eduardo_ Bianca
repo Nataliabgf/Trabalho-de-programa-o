@@ -12,7 +12,7 @@ int main()
     float peso_mat_estoque, valor_mat_estoque,mat_saida_estoque,cap_estoque=10,cap_coleta=10,est_coleta=0;
 
     //variáveis referentes a reciclagem
-    float peso_mat_reciclado,peso_mat_espera,valor_mat_reciclado;
+    float peso_mat_reciclado,peso_mat_espera=0,valor_mat_reciclado;
 
     //variáveis referentes ao armazém
     float peso_mat_armazem,valor_mat_armazem,cap_armazem=10;
@@ -25,7 +25,7 @@ int main()
 
  int i, modalidade=0;
 
- char mes_maior_rendimento,dia_maior_rendimento,local_processamento,local_armazem,local_estoque,local_descarte,local_retirada;
+ char mes_maior_rendimento,dia_maior_rendimento,local_processamento,local_armazem,local_estoque,local_descarte,local_retirada,escolha;
 
     setlocale(LC_ALL,"");
     system("color 20");
@@ -42,12 +42,13 @@ int main()
             printf("Bem-vindo!!\n");
             printf("Informe o procedimento a ser executado: ");
             printf("\n1 - Coleta\n");
-            printf("2 - Processamento\n");
+            printf("2 - Triagem e Processamento\n");
             printf("3 - Estoque\n");
             printf("4 - Descarte\n");
             printf("5 - Armazém\n");
             printf("6 - Venda\n");
-            printf("0 - Voltar ao menu\n");
+            printf("0 - Voltar ao menu\n\n");
+            printf("Opção >> ");
             scanf("%d", &modalidade);
         }
 
@@ -67,16 +68,27 @@ int main()
                 total_mat_coletado=peso_mat_coletado[0]+peso_mat_coletado[1]+peso_mat_coletado[2]+peso_mat_coletado[3]+peso_mat_coletado[4];
             }
 
-                printf("Total de Material Coletado: %.2f\n",total_mat_coletado);
-                printf("Deseja retornar ao menu? Digite 0 ");
-                scanf("%d", &modalidade);
+            system("cls");
+            printf("\n=======================================\n");
+            printf("\n\nCOLETA DE HOJE\n\n");
+            printf("\n=======================================\n");
+            printf("Área   Quantidade");
+            for(i=0;i<5;i++)
+            {
+                printf("\n%d -    %.2f t\n",i,peso_mat_coletado[i]);
+            }
+
+            printf("\nTotal de Material Coletado: %.2f t\n",total_mat_coletado);
+            printf("Deseja retornar ao menu ou prosseguir para a triagem?\n");
+            printf("Digite 0 para Menu ou 2 para Triagem >> ");
+            scanf("%d", &modalidade);
         }
 
         if(modalidade==2)
         {
             system("cls");
             printf("\n=======================================\n");
-            printf("\n\tCADASTRO DO PROCESSAMENTO\n");
+            printf("\n\tTRIAGEM E PROCESSAMENTO\n");
             printf("\n=======================================\n");
 
             if(total_mat_coletado==0)
@@ -86,10 +98,10 @@ int main()
                 scanf("%d",&modalidade);
             }
 
-            if((total_mat_coletado!=0)&&(total_mat_coletado<cap_processamento))
+            if((total_mat_coletado!=0)&&(total_mat_coletado<=cap_processamento))
             {
                 printf("O total de material coletado é: %.2f",total_mat_coletado);
-                printf("\nO material poderá ser todo processado\n");
+                printf("\nO material todo pode ser levado para triagem\n");
 
                 for(i=0;i<4;i++)
                 {
@@ -100,14 +112,15 @@ int main()
                     printf("3 - Vidro\n");
                     printf("4 - Orgânico\n");
 
-                    printf("Após o processamento, informe : ");
-                    scanf("%f", &peso_mat_reciclado);
+                    printf("Informe o peso do material triado: ");
+
 
                     peso_mat_descarte=peso_mat_processamento-peso_mat_reciclado;
                     cap_descarte=cap_descarte+peso_mat_descarte;
 
                     peso_mat_espera=peso_mat_espera+peso_mat_reciclado;
                 }
+
             }
 
             if(total_mat_coletado>cap_processamento)
@@ -123,7 +136,7 @@ int main()
                 total_mat_coletado=total_mat_coletado-est_coleta;
 
                 printf("\nDeseja retornar ao menu ou prosseguir para Processamento?\n");
-                printf("0 - Menu    2 - Processamento >> ");
+                printf("0 - Menu    2 - Triagem >> ");
                 scanf("%d",&modalidade);
             }
 
@@ -132,6 +145,18 @@ int main()
                        printf("Estoque cheio. Prosseguir para o estoque? Digite 3 >> ");
                        scanf("%d",&modalidade);
                 }
+
+            if(peso_mat_espera>0)
+            {
+                printf("O material reciclado é ");
+                printf("Deseja destinar o material para prensamento? ");
+                printf("Capacidade total de prensamento: %.2f",cap_armazem);
+                printf("Informe a quantidade em peso: ");
+                scanf("%f",&peso_mat_armazem);
+
+                cap_armazem=cap_armazem-peso_mat_armazem;
+
+            }
 
         }
 
@@ -143,6 +168,8 @@ int main()
             printf("\n=======================================\n");
 
             printf("O estoque da coleta está com: %.2f\n",est_coleta);
+            printf("O total de material coletado é: %.2f",total_mat_coletado);
+            printf("");
 
             printf("Deseja retornar ao menu? Digite 0 ");
             scanf("%d",&modalidade);
@@ -164,6 +191,9 @@ int main()
             printf("\n=======================================\n");
             printf("\n\tCADASTRO DO ARMAZÉM\n");
             printf("\n=======================================\n");
+
+            printf("O armazém está com %.2f kg de capacidade",peso_mat_armazem);
+            printf("");
 
             printf("Deseja retornar ao menu? Digite 0 ");
             scanf("%d",&modalidade);

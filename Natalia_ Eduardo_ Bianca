@@ -9,7 +9,7 @@ int main()
  valor_mat_descarte,valor_mat_venda,cap_armazem,cap_estoque,cap_descarte,funcionarios,transporte,manutencao,lucro_reciclagem,
  cap_processamento;
 
- int i;
+ int i, modalidade;
  
  char mes_maior_rendimento,dia_maior_rendimento,local_processamento,local_armazem,local_estoque,local_descarte,local_retirada;
  
@@ -21,14 +21,32 @@ int main()
     printf("\n=======================================\n");
 
     printf("Informe o procedimento a ser executado: ");
-    printf("")
-    
-    printf("\n=======================================\n");
-    printf("\n\tCOLETA\n");
-    printf("\n=======================================\n");
+    printf("\n1 - Coleta e Processamento\n");
+    printf("2 - Venda\n");
+    printf("0 - Fechar o programa\n");
+    scanf("%d", &modalidade);
 
-    printf("Informe o peso do material coletado: ");
-    scanf("%f", &peso_mat_coletado);
+    if(modalidade==1)
+    {
+        printf("\n=======================================\n");
+        printf("\n\tCOLETA E PROCESSAMENTO\n");
+        printf("\n=======================================\n");
+
+        printf("Informe o peso do material coletado: ");
+        scanf("%f", &peso_mat_coletado);
+    }
+
+    if(modalidade==2)
+    {
+        printf("\n=======================================\n");
+        printf("\n\tVENDA\n");
+        printf("\n=======================================\n");
+    }
+
+    else if(modalidade==0)
+    {
+        printf("Fechando o programa\n");
+    }
 
     return 0;
 }

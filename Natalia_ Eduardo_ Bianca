@@ -47,6 +47,22 @@ int main()
     {
         printf("Fechando o programa\n");
     }
+    
+     if(modalidade==1)
+        {
+    printf("\n==============\n");
+    printf("\n Coleta e Processamento");
+    printf("\n===============\n");        
+    
+    printf("Informe a capacidade de processamento");
+    scanf("%f",&cap_processamento);
+    
+    }
+        
+    
+    
+    
+    
 
     return 0;
 }

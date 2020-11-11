@@ -1,9 +1,35 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
 
+int main()
+{
  float peso_mat_coletado,peso_mat_processamento,peso_mat_estoque,mat_saida_estoque,peso_mat_reciclado,peso_mat_espera,
  peso_mat_armazem,peso_mat_descarte,peso_mat_venda,valor_mat_coletado,valor_mat_reciclado,valor_mat_estoque,valor_mat_armazem,
  valor_mat_descarte,valor_mat_venda,cap_armazem,cap_estoque,cap_descarte,funcionarios,transporte,manutencao,lucro_reciclagem,
  cap_processamento;
 
+ int i;
+ 
  char mes_maior_rendimento,dia_maior_rendimento,local_processamento,local_armazem,local_estoque,local_descarte,local_retirada;
  
- 
+    setlocale(LC_ALL,"");
+    system("color 20");
+
+    printf("\n=======================================\n");
+    printf("\n\tUSINA DE RECICLAGEM DE LIXO\n");
+    printf("\n=======================================\n");
+
+    printf("Informe o procedimento a ser executado: ");
+    printf("")
+    
+    printf("\n=======================================\n");
+    printf("\n\tCOLETA\n");
+    printf("\n=======================================\n");
+
+    printf("Informe o peso do material coletado: ");
+    scanf("%f", &peso_mat_coletado);
+
+    return 0;
+}
+

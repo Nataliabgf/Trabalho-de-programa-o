@@ -51,17 +51,24 @@ int main()
      if(modalidade==1)
         {
     printf("\n==============\n");
-    printf("\n Coleta e Processamento");
+    printf("\n\t Coleta e Processamento");
     printf("\n===============\n");        
     
     printf("Informe a capacidade de processamento");
     scanf("%f",&cap_processamento);
     
     }
-        
+     
+     if(Modalidade==1)
+  {
+    printf("\n==================\n");
+    printf("\n\t Coleta e Processamento");
+    printf("\n========================\n"); 
     
+    printf("Informe a capacidade de descarte");
+    scanf("%f",&cap_descarte);
     
-    
+    }
     
 
     return 0;

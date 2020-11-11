@@ -4,15 +4,28 @@
 
 int main()
 {
- float peso_mat_coletado,peso_mat_processamento,peso_mat_estoque,mat_saida_estoque,peso_mat_reciclado,peso_mat_espera,
- peso_mat_armazem,peso_mat_descarte,peso_mat_venda,valor_mat_coletado,valor_mat_reciclado,valor_mat_estoque,valor_mat_armazem,
- valor_mat_descarte,valor_mat_venda,cap_armazem,cap_estoque,cap_descarte,funcionarios,transporte,manutencao,lucro_reciclagem,
- cap_processamento;
+    //variáveis referentes a coleta e processamento
+    float peso_mat_coletado[4],valor_mat_coletado,peso_mat_processamento,cap_processamento=10;
+
+    //variáveis referentes ao estoque
+    float peso_mat_estoque, valor_mat_estoque,mat_saida_estoque,cap_estoque=10;
+
+    //variáveis referentes a reciclagem
+    float peso_mat_reciclado,peso_mat_espera,valor_mat_reciclado;
+
+    //variáveis referentes ao armazém
+    float peso_mat_armazem,valor_mat_armazem,cap_armazem=10;
+
+    //variáveis referentes ao descarte
+    float peso_mat_descarte,valor_mat_descarte,cap_descarte=10;
+
+    //variáveis referentes ao lucro e despesas
+    float peso_mat_venda,valor_mat_venda,funcionarios,transporte,manutencao,lucro_reciclagem;
 
  int i, modalidade;
- 
+
  char mes_maior_rendimento,dia_maior_rendimento,local_processamento,local_armazem,local_estoque,local_descarte,local_retirada;
- 
+
     setlocale(LC_ALL,"");
     system("color 20");
 
@@ -32,8 +45,30 @@ int main()
         printf("\n\tCOLETA E PROCESSAMENTO\n");
         printf("\n=======================================\n");
 
-        printf("Informe o peso do material coletado: ");
-        scanf("%f", &peso_mat_coletado);
+        //Informa o material coletado de cada área
+        for(i=0;i<5;i++)
+        {
+            printf("Informe o peso do material coletado: ");
+            scanf("%f", &peso_mat_coletado[i]);
+        }
+
+        if(peso_mat_processamento<cap_processamento)
+        {
+            printf("O material poderá ser todo processado\n");
+            printf("Informe o peso do material passível de reciclagem: ");
+            scanf("%f", &peso_mat_reciclado);
+
+            peso_mat_descarte=peso_mat_processamento-peso_mat_reciclado;
+            cap_descarte=cap_descarte+peso_mat_descarte;
+
+            peso_mat_espera=peso_mat_espera+peso_mat_reciclado;
+        }
+
+        if(peso_mat_processamento>cap_processamento)
+        {
+            printf("O material terá que ser destinado ao estoque\n");
+        }
+
     }
 
     if(modalidade==2)
@@ -47,29 +82,6 @@ int main()
     {
         printf("Fechando o programa\n");
     }
-    
-     if(modalidade==1)
-        {
-    printf("\n==============\n");
-    printf("\n\t Coleta e Processamento");
-    printf("\n===============\n");        
-    
-    printf("Informe a capacidade de processamento");
-    scanf("%f",&cap_processamento);
-    
-    }
-     
-     if(Modalidade==1)
-  {
-    printf("\n==================\n");
-    printf("\n\t Coleta e Processamento");
-    printf("\n========================\n"); 
-    
-    printf("Informe a capacidade de descarte");
-    scanf("%f",&cap_descarte);
-    
-    }
-    
 
     return 0;
 }

@@ -6,19 +6,19 @@
 int main()
 {
     //variáveis referentes a coleta e processamento
-    float peso_mat_coletado[a],total_mat_coletado=0,valor_mat_coletado,peso_mat_triado[a],total_mat_triado=0,cap_processamento=1000;
+    float peso_mat_coletado[a],total_mat_coletado=0,valor_mat_coletado,peso_mat_triado[a],total_mat_triado=0,cap_processamento=100;
 
     //variáveis referentes ao estoque
-    float peso_mat_estoque[a],valor_mat_estoque,mat_saida_estoque,cap_estoque=1000,cap_coleta=1000,est_coleta=0;
+    float peso_mat_estoque[a],valor_mat_estoque[a],mat_saida_estoque,cap_estoque=50,cap_coleta=100,est_coleta=0;
 
     //variáveis referentes a reciclagem
-    float peso_mat_reciclado[a],total_mat_reciclado=0,valor_mat_reciclado;
+    float peso_mat_reciclado[a],total_mat_reciclado=0,valor_mat_reciclado[a];
 
     //variáveis referentes ao armazém
-    float peso_mat_armazem[a],valor_mat_armazem,cap_armazem=1000,total_mat_armazem=0;
+    float peso_mat_armazem[a],valor_mat_armazem[a],cap_armazem=50,total_mat_armazem=0;
 
     //variáveis referentes ao descarte
-    float peso_mat_descarte[a],valor_mat_descarte,cap_descarte=1000,total_mat_descartado=0;
+    float peso_mat_descarte[a],valor_mat_descarte[a],cap_descarte=50,total_mat_descartado=0;
 
     //variáveis referentes ao lucro e despesas
     float peso_mat_venda[a],valor_mat_venda[a],funcionarios,transporte,manutencao,lucro_reciclagem;
@@ -33,7 +33,7 @@ int main()
     setlocale(LC_ALL,"");
     system("color 20");
 
-    while(modalidade<7)
+    while(modalidade<8)
     {
         system("cls");
         printf("\n=======================================\n");
@@ -354,45 +354,103 @@ int main()
             printf("\n\tCADASTRO DA VENDA\n");
             printf("\n=======================================\n");
 
-            if(total_mat_reciclado>0)
-            {
-                printf("Há reciclados para serem vendidos\n");
-                printf("\n=======================================\n");
-                printf("\n\nMATERIAIS RECICLADOS\n\n");
-                printf("\n=======================================\n");
-
-                printf("Reciclado    Descartado");
-
-                for(i=0;i<a;i++)
-                {
-                    printf("\n%.2f t -  %.2f t\n",peso_mat_reciclado[i],peso_mat_descarte[i]);
-                }
-
-                printf("\nTotal de Material Reciclado: %.2f t\n",total_mat_reciclado);
-
-                printf("Para retornar ao menu, digite 0 >> ");
-                scanf("%d",&modalidade);
-            }
-
             if(total_mat_reciclado==0)
             {
                 printf("É preciso ter reciclados para realizar a venda\n");
                 printf("Verifique se há materiais para coleta, no estoque ou no armazém\n");
-                system("pause");
-                modalidade==0;
+                printf("Para retornar ao menu, digite 0 >> ");
+                scanf("%d",&modalidade);
             }
 
-            printf("Para retornar ao menu, digite 0 >> ");
-            scanf("%d",&modalidade);
+            if(total_mat_reciclado>0)
+            {
+                printf("Há reciclados para serem avaliados.\n");
+                printf("Informe os valores de cada reciclado por kilo: \n");
+                    for(i=0;i<a;i++)
+                    {
+                        printf("Ordem dos Materiais: \n");
+                        printf("0 - Papel\n");
+                        printf("1 - Plástico\n");
+                        printf("2 - Metal\n");
+                        printf("3 - Vidro\n");
+                        printf("4 - Orgânico\n");
+
+                        //deve informar o quanto cada material irá valer
+                        printf("Informe os valores de cada reciclado por kilo: ");
+                        scanf("%f",&valor_mat_venda[i]);
+                    }
+
+                    for(i=0;i<a;i++)
+                    {
+                        valor_mat_reciclado[i]=valor_mat_venda[i]*peso_mat_reciclado[i];
+                        valor_mat_estoque[i]=valor_mat_venda[i]*peso_mat_estoque[i];
+                        valor_mat_armazem[i]=valor_mat_venda[i]*peso_mat_armazem[i];
+                        valor_mat_descarte[i]=valor_mat_venda[i]*peso_mat_descarte[i];
+                    }
+
+                printf("\n=======================================\n");
+                printf("\n\nVALORES DOS MATERIAIS\n\n");
+                printf("\n=======================================\n");
+
+                printf("Reciclado    Estoque    Armazém     Descarte    Valor");
+
+                    for(i=0;i<a;i++)
+                        {
+                            printf("\nR$ %.2f  -  R$ %.2f   -   R$%.2f  -   R$.2f   -   R$.2f\n",valor_mat_reciclado[i],valor_mat_estoque[i],valor_mat_armazem[i],valor_mat_descarte[i],valor_mat_venda[i]);
+                        }
+
+                printf("Deseja vender material?[s/n] >> ");
+                scanf("%c",&escolha);
+                if(escolha=='s')
+                {
+                    system("cls");
+                    printf("\n=======================================\n");
+                    printf("\n\nVALORES DOS MATERIAIS\n\n");
+                    printf("\n=======================================\n");
+
+                    printf("Peso    Valor Estimado    Valor por Kg");
+
+                    for(i=0;i<a;i++)
+                        {
+                            printf("\n%.2f t  -  R$ %.2f   -   R$%.2f\n",peso_mat_reciclado[i],valor_mat_reciclado[i],valor_mat_venda[i]);
+                        }
+
+                    printf("Informe a quantidade de reciclados por peso a serem vendidos: ");
+                    for(i=0;i<a;i++)
+                        {
+                            printf("Ordem dos Materiais: \n");
+                            printf("0 - Papel\n");
+                            printf("1 - Plástico\n");
+                            printf("2 - Metal\n");
+                            printf("3 - Vidro\n");
+                            printf("4 - Orgânico\n");
+
+                            //deve informar a quantidade em peso de cada material
+                            scanf("%f",&peso_mat_venda[i]);
+
+                            peso_mat_reciclado[i]=peso_mat_reciclado[i]-peso_mat_venda[i];
+                            cap_armazem=cap_armazem+peso_mat_reciclado[i];
+                        }
+                    printf("Materiais reciclados vendidos.\n");
+                    printf("Para retornar ao menu, digite 0 >> ");
+                    scanf("%d",&modalidade);
+                    }
+
+                    if(escolha=='n')
+                    {
+                    printf("Para retornar ao menu, digite 0 >> ");
+                    scanf("%d",&modalidade);
+                    }
+                }
+            }
         }
 
     if((modalidade>7)||(modalidade<0))
         {
             printf("Dígito incorreto\n");
-            printf("Deseja retornar ao menu? Digite 0 ");
+            printf("Para retornar ao menu, digite 0 >> ");
             scanf("%d",&modalidade);
         }
-    }
+
     return 0;
 }
-

@@ -3,6 +3,13 @@
 #include <locale.h>
 #define a 5
 
+/*
+Durante a produção do programa, diversas variáveis foram retiradas ou criadas desde a primeira versão.
+O programa foi alterado para ser funcional durante o primeiro uso.
+Alguns dos processos realizados durante a reciclagem de fato podem não ser necessários, pois podem ser automatizados
+com o uso de outros recursos [ex.: informar o peso de material triado, descartado, etc.].
+*/
+
 void usina_inicio()
 {
     system("cls");
@@ -13,47 +20,68 @@ void usina_inicio()
     printf("Bem-vindo!!\n");
     printf("Informe o procedimento a ser executado:\n");
     printf("1 - Coleta\n");
-    printf("2 - Triagem\n");
-    printf("3 - Prensagem\n");
-    printf("4 - Estoque\n");
-    printf("5 - Descarte\n");
-    printf("6 - Armazém\n");
-    printf("7 - Venda\n");
-    printf("0 - Voltar ao menu\n\n");
+    printf("2 - Processamento\n");
+    printf("3 - Estoque\n");
+    printf("4 - Descarte\n");
+    printf("5 - Armazém\n");
+    printf("6 - Venda\n");
+    printf("7 - Rendimentos\n");
+    printf("0 - Voltar ao Menu\n");
     printf("Opção >> ");
 }
 
+//Estrutura que armazena valores referentes aos funcionários
+typedef struct
+{
+    char cargo[30];
+    float salario;
+}Funcionarios;
+
+//Estrutura que armazena valores referentes a venda dos reciclados
+typedef struct
+{
+    float peso;
+    float v_quilo;
+    float v_tonelada;
+    float saida;
+    float ganho_t;
+    char local[30];
+}Vendas;
 
 int main()
 {
     setlocale(LC_ALL,"");
 
-    //variáveis referentes a coleta e processamento
-    float peso_mat_coletado[a],total_mat_coletado=0,valor_mat_coletado,peso_mat_triado[a],total_mat_triado=0,cap_triagem=100,cap_prensagem=100;
+    //Variáveis referentes a Coleta e Processamento
+    float peso_mat_coletado[a],total_mat_coletado=0,valor_mat_coletado,peso_mat_triado[a],total_mat_triado=0;
 
-    //variáveis referentes ao estoque
-    float peso_mat_estoque[a],valor_mat_estoque[a],mat_saida_estoque,cap_estoque=100,est_coleta=0;
+    //Variáveis referentes ao Estoque
+    float peso_mat_estoque[a],mat_saida_estoque,cap_estoque=100,est_coleta=0;
 
-    //variáveis referentes a reciclagem
-    float peso_mat_reciclado[a],total_mat_reciclado=0,valor_mat_reciclado[a];
+    //Variáveis referentes a Reciclagem e Armazém
+    float cap_reciclagem=100,total_mat_reciclado=0,cap_armazem=100;
 
-    //variáveis referentes ao armazém
-    float peso_mat_armazem[a],valor_mat_armazem[a],cap_armazem=100,total_mat_armazem=0;
+    //Variáveis referentes ao Descarte
+    float peso_mat_descarte[a],cap_descarte=100,total_mat_descartado=0;
 
-    //variáveis referentes ao descarte
-    float peso_mat_descarte[a],valor_mat_descarte[a],cap_descarte=50,total_mat_descartado=0;
+    //Variáveis referentes ao lucro e despesas
+    Vendas venda[a];
+    float total_venda,transporte,manutencao,lucro_reciclagem;
 
-    //variáveis referentes ao lucro e despesas
-    float peso_mat_venda[a],valor_mat_venda[a],funcionarios,transporte,manutencao,lucro_reciclagem;
+    //Variáveis referentes aos funcionários
+    //Foi usado como padrão 4 funcionários durante o programa em teste
+    Funcionarios renda[4];
+    float total_salario;
 
+    //Variáveis de Menu e Opções
     int i, modalidade=0;
 
-    char escolha,local[a][41];
-    char str[a][8]={{"Papel"},{"Plastico"},{"Metal"},{"Vidro"},{"Organico"}};
+    //Variáveis de Material
+    char str[a][9]={{"Papel"},{"Plastico"},{"Metal"},{"Vidro"},{"Organico"}};
 
     system("color 0A");
 
-    while((modalidade<8)||(modalidade==0))
+    while((modalidade<7)||(modalidade==0))
     {
         usina_inicio();
         scanf("%d",&modalidade);
@@ -81,7 +109,7 @@ int main()
                     scanf("%f", &peso_mat_coletado[i]);
 
                     total_mat_coletado=total_mat_coletado+peso_mat_coletado[i];
-                    cap_triagem=cap_triagem-peso_mat_coletado[i];
+                    cap_reciclagem=cap_reciclagem-peso_mat_coletado[i];
                 }
 
                 system("cls");
@@ -107,7 +135,7 @@ int main()
             {
                 system("cls");
                 printf("\n=======================================\n");
-                printf("\n\tTRIAGEM\n");
+                printf("\n\tPROCESSAMENTO\n");
                 printf("\n=======================================\n");
 
                 //A prensagem só é realizada após a triagem
@@ -120,7 +148,7 @@ int main()
                     modalidade==0;
                 }
 
-                if(cap_triagem==0)
+                if(cap_reciclagem==0)
                 {
                     //Informa que não é possível realizar a triagem porque não tem capacidade suficiente
                     //Essa opção só aparece quando foi coletado lixo acima da capacidade de reciclagem
@@ -134,7 +162,7 @@ int main()
 
                     cap_estoque=cap_estoque-est_coleta;
                     total_mat_coletado=total_mat_coletado-est_coleta;
-                    cap_triagem=cap_triagem+total_mat_coletado;
+                    cap_reciclagem=cap_reciclagem+total_mat_coletado;
 
                     system("pause");
                     printf("O material coletado informado foi movido para o estoque\n");
@@ -145,7 +173,7 @@ int main()
                     printf("\n:: Informações sobre Materiais Coletados:: \n\n");
                     printf("O total de material coletado é: %.2f t",total_mat_coletado);
                     printf("\nO material poderá ser triado.\n");
-                    printf("Capacidade de triagem: %.2f t\n",cap_triagem);
+                    printf("Capacidade de triagem: %.2f t\n",cap_reciclagem);
 
                     for(i=0;i<a;i++)
                     {
@@ -169,48 +197,20 @@ int main()
                         total_mat_descartado=total_mat_descartado+peso_mat_descarte[i];
                         total_mat_coletado=total_mat_coletado-(peso_mat_triado[i]+peso_mat_descarte[i]);
 
-                        cap_triagem=cap_triagem+(peso_mat_triado[i]+peso_mat_descarte[i]);
+                        cap_reciclagem=cap_reciclagem+(peso_mat_triado[i]+peso_mat_descarte[i]);
                         cap_descarte=cap_descarte-peso_mat_descarte[i];
                         system("cls");
                         fflush(stdin);
                     }
-                        printf("Os materiais estão prontos para prensagem ou separados para descarte.\n");
-                        modalidade==0;
+                        printf("Os materiais triados estão prontos para prensagem.\n");
                         system("pause");
-                }
-                break;
-            }
-
-            case 3:
-            {
-                system("cls");
-                printf("\n=======================================\n");
-                printf("\n\tPRENSAGEM\n");
-                printf("\n=======================================\n");
-
-                //A reciclagem só é concluída se for realizado o processo de triagem e de prensagem
-                //Neste programa foi definido que a capacidade de triagem é a mesma da prensagem e do armazém
-                if(total_mat_triado==0)
-                {
-                    printf("Não há opções disponíveis no momento.\n");
-                    printf("É preciso ter material triado para realizar a prensagem\n");
-                    system("pause");
-                    modalidade==0;
-                }
-
-                if(total_mat_triado>0)
-                {
-                    printf("O material triado será encaminhado para a prensagem.\n");
-                    system("pause");
 
                     for(i=0;i<a;i++)
                         {
                             total_mat_reciclado=total_mat_triado;
-                            peso_mat_reciclado[i]=peso_mat_triado[i];
-                            peso_mat_triado[i]=peso_mat_triado[i]-peso_mat_triado[i];
-                            peso_mat_armazem[i]=peso_mat_reciclado[i];
-                            total_mat_armazem=total_mat_reciclado;
-                            cap_armazem=cap_armazem-peso_mat_reciclado[i];
+                            venda[i].peso=peso_mat_triado[i];
+                            peso_mat_triado[i]=peso_mat_triado[i]-venda[i].peso;
+                            cap_armazem=cap_armazem-venda[i].peso;
                         }
 
                     printf("\n\nA reciclagem foi concluída.\n");
@@ -225,19 +225,18 @@ int main()
 
                     for(i=0;i<a;i++)
                         {
-                            printf("\n%.2f t -    %.2f t\n",peso_mat_reciclado[i],peso_mat_descarte[i]);
+                            printf("\n%.2f t -    %.2f t\n",venda[i].peso,peso_mat_descarte[i]);
                         }
 
                     printf("\nTotal de Material Reciclado: %.2f t\n",total_mat_reciclado);
                     printf("Os reciclados estão prontos para venda\n");
                     system("pause");
                     modalidade==0;
-
                 }
                 break;
             }
 
-            case 4:
+            case 3:
             {
                 system("cls");
                 printf("\n=======================================\n");
@@ -262,30 +261,30 @@ int main()
                 if(cap_estoque<100)
                 {
                     printf("Há %.2f t de material disponível para triagem.",est_coleta);
-                    printf("A capacidade de triagem é de %.2f t\n",cap_triagem);
+                    printf("A capacidade de triagem é de %.2f t\n",cap_reciclagem);
                     printf("Encaminhar quanto para triagem? >> ");
                     scanf("%f",&mat_saida_estoque);
 
-                    if((cap_triagem>0)&&(mat_saida_estoque<=cap_triagem))
+                    if((cap_reciclagem>0)&&(mat_saida_estoque<=cap_reciclagem))
                         {
                             total_mat_coletado=total_mat_coletado+est_coleta;
                             cap_estoque=cap_estoque+est_coleta;
                             est_coleta=est_coleta-est_coleta;
-                            cap_triagem=cap_triagem-total_mat_coletado;
+                            cap_reciclagem=cap_reciclagem-total_mat_coletado;
 
                             printf("Operação realizada com sucesso.\n");
                             system("pause");
                             modalidade==0;
                         }
 
-                    if((cap_triagem>0)&&(mat_saida_estoque>cap_triagem))
+                    if((cap_reciclagem>0)&&(mat_saida_estoque>cap_reciclagem))
                         {
                             printf("O valor informado é maior que a capacidade de triagem.\n");
                             printf("Informe um valor menor: ");
                             scanf("%f",&mat_saida_estoque);
                         }
 
-                    if(cap_triagem<=0)
+                    if(cap_reciclagem<=0)
                     {
                         printf("Não é possível encaminhar material pois a capacidade de triagem está cheia.\n");
                         printf("É preciso prensar o material disponível.\n");
@@ -296,7 +295,7 @@ int main()
             break;
             }
 
-            case 5:
+            case 4:
             {
                 system("cls");
                 printf("\n=======================================\n");
@@ -346,7 +345,7 @@ int main()
             break;
             }
 
-            case 6:
+            case 5:
             {
                 system("cls");
                 printf("\n=======================================\n");
@@ -380,7 +379,7 @@ int main()
             break;
             }
 
-            case 7:
+            case 6:
             {
                 system("cls");
                 printf("\n=======================================\n");
@@ -399,6 +398,7 @@ int main()
                 if(total_mat_reciclado>0)
                 {
                     printf("Há reciclados para serem avaliados.\n");
+                    fflush(stdin);
 
                     for(i=0;i<a;i++)
                     {
@@ -411,15 +411,14 @@ int main()
 
                         //Deve informar o quanto cada material irá valer por quilo
                         printf("\nInforme os valores de cada reciclado [%d] por quilo: ",i);
-                        scanf("%f",&valor_mat_venda[i]);
+                        scanf("%f",&venda[i].v_quilo);
                         fflush(stdin);
                         system("cls");
                     }
 
                     for(i=0;i<a;i++)
                     {
-                        valor_mat_reciclado[i]=((valor_mat_venda[i]*1000)*peso_mat_reciclado[i]);
-                        valor_mat_descarte[i]=((valor_mat_venda[i]*1000)*peso_mat_descarte[i]);
+                        venda[i].v_tonelada=((venda[i].v_quilo*1000)*venda[i].peso);
                     }
 
                 system("cls");
@@ -427,73 +426,111 @@ int main()
                 printf("\tVALORES DOS MATERIAIS");
                 printf("\n=======================================\n");
 
-                printf("Material       Reciclado        Descarte        Valor");
+                printf("Material       Peso      Valor Estimado     Valor por Kg");
 
-                    for(i=0;i<a;i++)
-                        {
-                            printf("\n%s    - R$ %.2f   -   R$ %.2f   -    R$%.2f\n",str[i],valor_mat_reciclado[i],valor_mat_descarte[i],valor_mat_venda[i]);
-                        }
-
-                printf("Deseja vender material?[s/n] >> ");
-                scanf("%c",&escolha);
-                if(escolha=='s')
+                for(i=0;i<a;i++)
                 {
-                    system("cls");
-                    printf("\n=======================================\n");
-                    printf("\tVALORES PARA VENDA");
-                    printf("\n=======================================\n");
-
-                    printf("Material       Peso      Valor Estimado     Valor por Kg");
-
-                    for(i=0;i<a;i++)
-                        {
-                            printf("\n%s       -  %.2f t    -  R$ %.2f     -   R$%.2f\n",str[i],peso_mat_reciclado[i],valor_mat_reciclado[i],valor_mat_venda[i]);
-                        }
-
-                    printf("Ordem dos Materiais: \n");
-                    printf("0 - Papel\n");
-                    printf("1 - Plástico\n");
-                    printf("2 - Metal\n");
-                    printf("3 - Vidro\n");
-                    printf("4 - Orgânico\n");
-
-                    for(i=0;i<a;i++)
-                        {
-                            //Deve informar a quantidade em peso de cada material
-                            printf("\nQuantos reciclados [%d] por peso serão vendidos? >> ",i);
-                            scanf("%f",&peso_mat_venda[i]);
-                            fflush(stdin);
-
-                            //Informe o destino do material a ser vendido
-                            printf("Que destino terá o reciclado[%d]? >> ",i);
-                            gets(local[i]);
-                            fflush(stdin);
-
-                            cap_armazem=cap_armazem+peso_mat_reciclado[i];
-                            peso_mat_reciclado[i]=peso_mat_reciclado[i]-peso_mat_venda[i];
-                        }
-
-                    printf("\nMateriais reciclados vendidos.\n");
-
-                    printf("Material     Peso      Venda       Local");
-
-                    for(i=0;i<a;i++)
-                        {
-                            printf("\n%s       -  %.2f t    -  R$ %.2f     -   %s\n",str[i],peso_mat_venda[i],valor_mat_reciclado[i],local[i]);
-                        }
-
+                    printf("\n%s       -  %.2f t    -  R$ %.2f     -   R$%.2f\n",str[i],venda[i].peso,venda[i].v_tonelada,venda[i].v_quilo);
                 }
 
-                if(escolha=='n')
+                for(i=0;i<a;i++)
                 {
-                    printf("Não há opções disponíveis no momento.\n");
-                    system("pause");
-                    modalidade==0;
+                    //Deve informar a quantidade em peso de cada material
+                    printf("\nQuantos reciclados [%d] em toneladas serão vendidos? >> ",i);
+                    scanf("%f",&venda[i].saida);
+                    fflush(stdin);
+
+                    //Informe o destino do material a ser vendido
+                    printf("Que destino terá o reciclado[%d]? >> ",i);
+                    gets(venda[i].local);
+                    fflush(stdin);
+
+                    cap_armazem=cap_armazem+venda[i].saida;
+                    venda[i].peso=venda[i].peso-venda[i].saida;
                 }
+
+                for(i=0;i<a;i++)
+                {
+                        venda[i].ganho_t=venda[i].v_tonelada*venda[i].saida;
+                }
+
+                fflush(stdin);
+                system("pause");
+                system("cls");
+                printf("\nMateriais reciclados vendidos.\n\n");
+
+                printf("Material     Peso      Venda       Local");
+
+                for(i=0;i<a;i++)
+                {
+                    printf("\n%s       -  %.2f t    -  R$ %.2f     -   %s\n",str[i],venda[i].saida,venda[i].ganho_t,venda[i].local);
+                }
+
             }
-                break;
-                }
 
+            break;
+            }
+
+            case 7:
+            {
+                system("cls");
+                printf("\n=======================================\n");
+                printf("\tRENDIMENTOS");
+                printf("\n=======================================\n");
+
+                printf(":: Funcionários ::\n");
+
+                for(i=0;i<4;i++)
+                    {
+                        printf("\nInforme o cargo do funcionario: ");
+                        gets(renda[i].cargo);
+                        fflush(stdin);
+
+                        printf("\nInforme o salário do funcionário: ");
+                        scanf("%f",&renda[i].salario);
+                        fflush(stdin);
+                    }
+
+                printf(":: Transporte ::\n");
+                printf("Informe o valor gasto com transporte: ");
+                scanf("%f",&transporte);
+
+                printf(":: Manutenção ::\n");
+                printf("Informe o valor gasto com manutenção: ");
+                scanf("%f",&manutencao);
+
+                printf(":: Cálculo do Lucro com Reciclagem ::\n");
+
+                for(i=0;i<4;i++)
+                    {
+                        total_salario=total_salario+renda[i].salario;
+                    }
+
+                    for(i=0;i<a;i++)
+                    {
+                        total_venda=total_venda+venda[i].v_tonelada;
+                    }
+
+                lucro_reciclagem=total_venda-(total_salario+transporte+manutencao);
+
+                printf("O valor obtido com a reciclagem é de %.2f reais",lucro_reciclagem);
+
+                if(lucro_reciclagem>0)
+                    {
+                        printf("A reciclagem está dando lucro e cobrindo todas as despesas.\n\n");
+                        system("cls");
+                        modalidade==0;
+                    }
+
+                if(lucro_reciclagem<0)
+                    {
+                        printf("A reciclagem está dando prejuízo.");
+                        printf("Os valores de venda de reciclados não estão cobrindo todas as despesas.\n\n");
+                        system("cls");
+                        modalidade==0;
+                    }
+                break;
+            }
         }
 
     }

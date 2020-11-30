@@ -1,3 +1,17 @@
+# Últimas Modificações
+    Os processos de triagem e prensagem foram inseridos em um único processo [processamento];
+
+    O menu foi alterado, trocando Triagem e Prensagem por Processamento e adicionando Rendimentos;
+
+    O novo menu Rendimentos consiste em informar os salários dos funcionários, valores gastos com transporte e manutenção e calcular o lucro obtido com a reciclagem;
+
+    Foram inseridos structs dos materiais reciclados para venda e rendimento dos funcionários;
+
+    Foi consertado a string dos nomes dos materiais (o erro estava na quantidade de caracteres);
+
+    Foi detectado erro no momento em que deveria aparecer a tabela com o nome do local com a quantidade de reciclados vendidos;
+
+
 # Variáveis da Etapa 1
 
 # sistema_reciclagem_resíduos 
